@@ -1,4 +1,6 @@
-import os 
+import os
+import time
+
 
 def isComment(line):
     if( "//" in line ):
@@ -17,10 +19,10 @@ def takePicOfScad(name, num, scadOutputFile):
     #print( openScadDir )
     outDir = 'pics/'
     outputPicture = '%s%s%s%s%s' % (outDir, name, '_', num, '.png')
-    #print( outputPicture )
-    command = '%s%s%s%s%s%s' % ('sudo ', 'openscad', ' --o ', outputPicture, ' --render --camera 0,0,0,45,0,135,40  --imgsize 1920,1080 --view axes ', scadOutputFile)
+    command = '%s%s%s%s%s%s' % ('sudo ', 'openscad', ' --o ', outputPicture, ' --render --camera 11.5,0,1.75,55,0,25,550  --imgsize 1920,1080 --view axes ', scadOutputFile)
     #print( command )
     os.system(command)
+    print( '>> created: ', outputPicture )
 
 
 inputFile = 'cube.scad'
@@ -29,9 +31,10 @@ scadFile = open( inputFile, 'r' )
 outputDir = 'outputData/'
 
 i=0
-for i in range(6):
+for i in range(86:
+    tic1 = time.perf_counter()
     results = list()
-    #print (i)
+    print ('>> working on: ', i)
     scadFile.seek(0)
     for line in scadFile:
         if ( isComment( line ) ):
@@ -44,5 +47,10 @@ for i in range(6):
     for elem in results:
         outputFile.write(elem)
     outputFile.close()
-
+    toc1 = time.perf_counter()
+    tic2 = time.perf_counter()
     takePicOfScad(inputFile.split('.')[0], i, outputFileName)
+    toc2 = time.perf_counter()
+
+    print('>> write file: ', toc1-tic1)
+    print('>> take picture: ', toc2-tic2)
